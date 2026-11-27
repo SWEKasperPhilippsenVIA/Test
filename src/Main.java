@@ -19,7 +19,11 @@ public class Main {
         checkSearch(collection, null);
         checkSearch(collection, "gia", "Lugia");
 
-        System.out.println("RESULTAT: " + testsPassed + "/7 test bestaaet");
+        checkLimited(collection, "shining", 1, "Shining Gyarados");
+        checkLimited(collection, "shining", 2, "Shining Gyarados", "Shining Charizard");
+        checkLimited(collection, "shining", 0);
+
+        System.out.println("RESULTAT: " + testsPassed + "/10 test bestaaet");
     }
 
     private static void checkSearch(CardCollection collection, String query, String... expected) {
@@ -40,6 +44,24 @@ public class Main {
 
         testsPassed++;
         System.out.println("PASS " + testsPassed + " | soegning: " + String.valueOf(query)
+                + " | fundet: " + results.size() + " | samling: " + collection.getCount());
+    }
+
+    private static void checkLimited(CardCollection collection, String query, int limit, String... expected) {
+        ArrayList<PokemonCard> results = collection.searchByName(query, limit);
+        if (results.size() != expected.length) {
+            throw new AssertionError("Forkert antal resultater med graense: " + limit);
+        }
+        for (int i = 0; i < expected.length; i++) {
+            if (!results.get(i).getName().equals(expected[i])) {
+                throw new AssertionError("Forkert resultat med graense: " + limit);
+            }
+        }
+        if (collection.getCount() != 5) {
+            throw new AssertionError("Samlingen blev aendret");
+        }
+        testsPassed++;
+        System.out.println("PASS " + testsPassed + " | graense: " + limit
                 + " | fundet: " + results.size() + " | samling: " + collection.getCount());
     }
 }
