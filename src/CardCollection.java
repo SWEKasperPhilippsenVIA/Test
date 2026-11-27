@@ -29,4 +29,17 @@ public class CardCollection {
 
         return matches;
     }
+
+    // Ekstra funktion: vis kun de foerste maxResults resultater.
+    public ArrayList<PokemonCard> searchByName(String query, int maxResults) {
+        ArrayList<PokemonCard> limited = new ArrayList<>();
+        if (maxResults <= 0) {
+            return limited;
+        }
+        ArrayList<PokemonCard> matches = searchByName(query);
+        for (int i = 0; i < matches.size() && i < maxResults; i++) {
+            limited.add(matches.get(i));
+        }
+        return limited;
+    }
 }
